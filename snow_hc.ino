@@ -3,11 +3,12 @@
 int trigPin = 10; 
 int echoPin = 11;  
 int first_distance;
+int duration;
+int V = 0.03448; //при комнатной температуре (20 градусов) в см/мкс
 void setup() {
   Serial.begin (9600);
   pinMode(trigPin, OUTPUT); 
   pinMode(echoPin, INPUT); 
-  int duration;
   digitalWrite(trigPin, LOW); 
   delayMicroseconds(2); 
   digitalWrite(trigPin, HIGH);
@@ -15,7 +16,7 @@ void setup() {
   delayMicroseconds(10); 
   digitalWrite(trigPin, LOW); 
    duration = pulseIn(echoPin, HIGH); 
-   first_distance = duration / 58;
+   first_distance = (duration * V) /2;
    Serial.print(first_distance); 
   Serial.println(" cm - first_distance");
 }
@@ -23,9 +24,8 @@ void setup() {
 // duration - продолжительност с англ
 //v - скорость звука в воздухе - отличается при разных температурах
 void loop() {
-  int duration, V, t, distance, delta;
-  V = 344; //при комнатной температуре (20 градусов)
-  t=20; //температура в градусах цельсия
+  int duration, V, distance, delta;
+  V = 0.03448; //при комнатной температуре (20 градусов) в см/мкс
   digitalWrite(trigPin, LOW); 
   delayMicroseconds(2); 
   digitalWrite(trigPin, HIGH);
@@ -33,7 +33,7 @@ void loop() {
   delayMicroseconds(10); 
   digitalWrite(trigPin, LOW); 
    duration = pulseIn(echoPin, HIGH); //Длина сигнала в микросекундах
-   distance = duration * sqrt(t+273) / 1000;
+   distance = (duration * V) /2;
    delta = first_distance - distance;
   // Выведем значение в Serial Monitor
   Serial.print(delta); 
