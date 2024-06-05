@@ -2,9 +2,9 @@
 // Укажем, что к каким пинам подключено
 int trigPin = 10; 
 int echoPin = 11;  
-int first_distance;
-int duration;
-int V = 0.03448; //при комнатной температуре (20 градусов) в см/мкс
+float first_distance;
+unsigned long duration;
+float V = 0.03448; //при комнатной температуре (20 градусов) в см/мкс
 void setup() {
   Serial.begin (9600);
   pinMode(trigPin, OUTPUT); 
@@ -24,8 +24,9 @@ void setup() {
 // duration - продолжительност с англ
 //v - скорость звука в воздухе - отличается при разных температурах
 void loop() {
-  int duration, V, distance, delta;
-  V = 0.03448; //при комнатной температуре (20 градусов) в см/мкс
+  unsigned long distance, delta;
+  unsigned long duration;
+  float V = 0.03448; //при комнатной температуре (20 градусов) в см/мкс
   digitalWrite(trigPin, LOW); 
   delayMicroseconds(2); 
   digitalWrite(trigPin, HIGH);
@@ -33,14 +34,17 @@ void loop() {
   delayMicroseconds(10); 
   digitalWrite(trigPin, LOW); 
    duration = pulseIn(echoPin, HIGH); //Длина сигнала в микросекундах
-   distance = (duration * V) /2;
+   distance = (duration*V)/2;
    delta = first_distance - distance;
   // Выведем значение в Serial Monitor
-  Serial.print(delta); 
-  Serial.println(" cm - delta");
+  //Serial.print(duration); 
+  //Serial.println(" duration");  
+  //Serial.print(delta); 
+  //Serial.println(" cm - delta");
   Serial.print(distance); 
   Serial.println(" cm - distance");  
-  delay(5000);
+  
+  delay(500);
 }
 // необходимая переодичность измерений для ледника? раз в какой период времени надо измерять уровень ледника???
 //sd - карта памяти, куда записываются данные с датчика
